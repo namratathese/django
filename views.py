@@ -1,21 +1,16 @@
-from django.shortcuts import render
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from watchlist_app.models import Movie
-from django.http import JsonResponse
+from watchlist_app.api.serializer import MovieSerializer
 
-# Create your views here.
+@api_view()
 def movie_list(request):
     movies=Movie.objects.all()
-    data={'movies':list(movies.values())} #jsonresponse for all element
+    serializer=MovieSerializer(movies,many=True)
+    return Response(serializer.data)
 
-    return JsonResponse(data)
-
-#jsonresponse for individual element
+@api_view()
 def movie_details(request,pk):
     movie=Movie.objects.get(pk=pk)
-    data={
-        'name':movie.name,
-        'description':movie.description,
-        'activate':movie.active
-    }
-    return JsonResponse(data)
-    
+    serializer=MovieSerializer(movie)
+    return Response(serializer.data)
