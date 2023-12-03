@@ -5,6 +5,7 @@ from rest_framework import status #showing proper error form
 from watchlist_app.models import Movie
 from watchlist_app.api.serializer import MovieSerializer
 
+#=================class based views=============
 class MovieListAV(APIView):
     def get(self,request):
         movies=Movie.objects.all()
@@ -46,7 +47,7 @@ class MovieDetailAV(APIView):
 
 
 
-
+#=====================================================function baesd views===============================================
 # @api_view(['GET','POST'])
 # def movie_list(request):
 
