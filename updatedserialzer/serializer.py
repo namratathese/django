@@ -1,33 +1,57 @@
 from rest_framework import serializers
-from watchlist_app.models import Movie
+from watchlist_app.models import WatchList,StreamPlatform,Review
 
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        exclude=('watchlist',)
+        #fields = "__all__"
+        
+        
 #======================using modelserializer================
-class MovieSerializer(serializers.ModelSerializer):
-    len_name=serializers.SerializerMethodField()  #custom serializer fields
-
+class WatchListSerializer(serializers.ModelSerializer):
+    ##**len_name=serializers.SerializerMethodField()  #custom serializer fields
+    reviews = ReviewSerializer(many=True,read_only=True)
+    
 # class MovieSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Movie
+        model=WatchList
         fields="__all__"
 #         #fields=['id','name','description'] #for all the fields__all__
 #         exclude=['id'] #for excluding the id feild
     
-    def get_len_name(self,object):
-        return len(object.name)
+class StreamPlatformSerializer(serializers.HyperlinkedModelSerializer):
+    watchlist = WatchListSerializer(many=True,read_only=True)
+    
+#=============================for hyperlink==========================
+    # watchlist = serializers.HyperlinkedRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     view_name='movie-detail'
+    #     )
+
+    class Meta:
+        model=StreamPlatform
+        fields="__all__"
+        
+
+#================================================================================
+    # def get_len_name(self,object):
+    #     return len(object.name)
          
         
-    def validate(self, data):
-        if data['name'] == data['description']:
-            raise serializers.ValidationError('name and description should be same!')
-        else:
-            return data
+    # def validate(self, data):
+    #     if data['name'] == data['description']:
+    #         raise serializers.ValidationError('name and description should be same!')
+    #     else:
+    #         return data
     
-    #field level validator
-    def validate_name(self,value):
-        if len(value)<2:
-            raise serializers.ValidationError("Name is too short")
-        else:
-            return value
+    # #field level validator
+    # def validate_name(self,value):
+    #     if len(value)<2:
+    #         raise serializers.ValidationError("Name is too short")
+    #     else:
+    #         return value
         
     
     
