@@ -1,33 +1,27 @@
-#from django.contrib import admin
+"""
+URL configuration for watchmate project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/4.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
 from django.urls import path,include
-from rest_framework.routers import DefaultRouter
-#from watchlist_app.api.views import movie_list,movie_details   #=======fun based views name========
-from watchlist_app.api.views import (WatchListAV,WatchDetailAV,
-                                     StreamPlatformAV,
-                                     StreamPlatformDetailAV,StreamPlatformVS,
-                                     ReviewList,ReviewDetail,ReviewCreate) #=======class views name========
-
-#========[MovieListAV,MovieDetailAV]=============
-
-router = DefaultRouter()
-router.register('stream',StreamPlatformVS,basename='streamplatform')
-
 
 urlpatterns = [
-    path('list/', WatchListAV.as_view(),name='movie-list'),
-    path('<int:pk>',WatchDetailAV.as_view(),name='movie-detail'),
+    path('admin/', admin.site.urls),
+    path('watch/',include('watchlist_app.api.urls')),
+    path('account/',include('user_app.api.urls')),
     
-    path('',include(router.urls)),
     
-    #path('stream/',StreamPlatformAV.as_view(),name='stream'),
-    #path('stream/<int:pk>',StreamPlatformDetailAV.as_view(),name='streamplatform-detail'),
-    
-    path('stream/<int:pk>/review-create',ReviewCreate.as_view(),name='review-create'),
-
-    path('stream/<int:pk>/review',ReviewList.as_view(),name='review-list'),
-    path('stream/review/<int:pk>',ReviewDetail.as_view(),name='review-detail'),
-    
-    #path('review/',ReviewList.as_view(),name='review-list'),
-    #path('review/<int:pk>',ReviewDetail.as_view(),name='review-detail'),
-]   
-
+    #path('api-auth/',include('rest_framework.urls'))    #for temprory login & logout 
+]
