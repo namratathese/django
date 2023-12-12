@@ -13,7 +13,9 @@ class ReviewSerializer(serializers.ModelSerializer):
 #======================using modelserializer================
 class WatchListSerializer(serializers.ModelSerializer):
     ##**len_name=serializers.SerializerMethodField()  #custom serializer fields for finding the length of movie-name/watchlist
-    reviews = ReviewSerializer(many=True,read_only=True)
+    #IT DISABLE REVIEW/RATING
+    # reviews = ReviewSerializer(many=True,read_only=True)
+    platform = serializers.CharField(source='platform.name')
 
   
 # class MovieSerializer(serializers.ModelSerializer):
